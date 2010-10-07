@@ -1,0 +1,40 @@
+= Docheck
+  Docheck is a tool to check domain name availability. By default, It will return all available and registered domains.
+
+
+== Requirements
+
+* Ruby >= 1.8.6
+* whois gem - http://github.com/weppos/whois
+
+
+== Installation
+
+  $ gem install docheck
+
+
+== Usage
+w = Whois::Client.new
+From the command line:
+
+  docheck google
+
+From the Ruby file or IRB.
+
+  require 'rubygems'
+  require 'docheck'
+
+  # Docheck only have two methods: print and fetch
+  Docheck.new('github').print
+  # or
+  Docheck.new('github').fetch
+
+
+== Author
+
+Author:: {Kunto Aji Kristianto}[http://www.railsmine.net/] <kunto.aji.kr@gmail.com>
+
+
+== License
+
+Copyright (c) 2009-2010 Simone Carletti, Whois is released under the MIT license.

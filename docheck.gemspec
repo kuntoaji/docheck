@@ -12,7 +12,7 @@ Gem::Specification.new do |spec|
     'README.rdoc', 'VERSION', 'bin/docheck', 'lib/docheck.rb',
     'test/docheck_test.rb', 'test/helper.rb']
   spec.has_rdoc = true
-  spec.hompage = 'http://github.com/kuntoaji/docheck'
+  spec.homepage = 'http://github.com/kuntoaji/docheck'
   spec.name = 'docheck'
   spec.rdoc_options = ['--main', 'README.rdoc']
   spec.required_ruby_version = '>= 1.8.7'

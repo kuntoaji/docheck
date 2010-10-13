@@ -12,6 +12,10 @@ class Docheck
   TLD = %w{aero asia biz cat com coop edu gov info
   int jobs mil mobi museum name net org pro tel travel}
 
+  # Public instance method to return available domains or
+  # registered domains
+  attr_reader :available_domains, :registered_domains
+
   # base_name is sld (Second Level Domain) and
   # converted to lower case.
   def initialize(base_name)

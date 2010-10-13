@@ -1,6 +1,12 @@
 require File.expand_path('../helper.rb', __FILE__)
 
 class TestDocheck < Test::Unit::TestCase
+  context "Docheck gem" do
+    should "require Whois" do
+      assert defined?(Whois)
+    end
+  end
+
   context "A Docheck instance" do
     setup do
       @docheck = Docheck.new('railsmine')

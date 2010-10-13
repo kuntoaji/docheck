@@ -19,7 +19,7 @@ class Docheck
   # base_name is sld (Second Level Domain) and
   # converted to lower case.
   def initialize(base_name)
-    @base_name = base_name
+    @base_name = base_name.downcase
     @available_domains = []
     @registered_domains = []
   end

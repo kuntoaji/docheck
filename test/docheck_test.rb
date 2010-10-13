@@ -12,11 +12,22 @@ class TestDocheck < Test::Unit::TestCase
       @docheck = Docheck.new('railsmine')
     end
 
+    should "respond to all its public instance method" do
+      assert @docheck.respond_to?(:fetch)
+      assert @docheck.respond_to?(:print)
+      assert @docheck.respond_to?(:available_domains)
+      assert @docheck.respond_to?(:registered_domains)
+    end
+
     should "return all availability and registered domain" do
       result = @docheck.fetch
       assert result.is_a?(Array)
       assert result.first.is_a?(Array)
+      assert @docheck.available_domains.is_a?(Array)
+      assert_equal result.first, @docheck.available_domains
       assert result.last.is_a?(Array)
+      assert @docheck.registered_domains.is_a?(Array)
+      assert_equal result.last, @docheck.registered_domains
       assert_not_nil result
     end
 

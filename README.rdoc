@@ -1,5 +1,5 @@
 = Docheck
-  Docheck is a tool to check domain name availability. By default, It will return all available and registered domains.
+  Domain name availability checker. By default, It will return all available and registered domains.
 
 
 == Requirements
@@ -23,10 +23,10 @@ From the Ruby file or IRB.
   require 'rubygems'
   require 'docheck'
 
-  # Docheck only have two methods: print and fetch
-  Docheck.new('github').print
+  # Docheck only have two instance methods: print and fetch
+  Docheck::Application.new('github').print
   # or
-  Docheck.new('github').fetch
+  Docheck::Application.new('github').fetch
 
 
 == Author
@@ -36,4 +36,4 @@ Author:: {Kunto Aji Kristianto}[http://www.railsmine.net/] <kunto.aji.kr@gmail.c
 
 == License
 
-Copyright (c) 2009-2010 Simone Carletti, Whois is released under the MIT license.
+Copyright (c) 2010 Kunto Aji Kristianto, Docheck is released under the MIT license.

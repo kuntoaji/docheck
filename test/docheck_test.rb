@@ -9,7 +9,7 @@ class TestDocheck < Test::Unit::TestCase
 
   context "A Docheck instance" do
     setup do
-      @docheck = Docheck.new('railsmine')
+      @docheck = Docheck::Application.new('railsmine')
     end
 
     should "respond to all its public instance method" do

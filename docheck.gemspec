@@ -2,7 +2,7 @@ Gem::Specification.new do |spec|
   spec.authors = 'Kunto Aji Kristianto'
   spec.add_dependency('whois', '~> 1.3.8')
   spec.description = <<-EOF
-    Docheck is domain name availability checker.
+    Domain name availability checker.
   EOF
   spec.email = 'kunto.aji.kr@gmail.com'
   spec.executables << 'docheck'
@@ -18,5 +18,5 @@ Gem::Specification.new do |spec|
   spec.requirements << 'ruby-whois, v1.3.8 or greater'
   spec.summary = 'Domain name availability checker.'
   spec.test_files = ['test/docheck_test.rb', 'test/helper.rb'] 
-  spec.version = '1.0.1'
+  spec.version = '1.0.2'
 end

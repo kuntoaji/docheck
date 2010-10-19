@@ -7,6 +7,8 @@
 require 'whois'
 
 module Docheck
+  VERSION = '1.1.0'
+
   class Application
 
     # DNS name of the generic top-level domain

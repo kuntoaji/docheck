@@ -18,5 +18,5 @@ Gem::Specification.new do |spec|
   spec.requirements << 'ruby-whois, v1.3.8 or greater'
   spec.summary = 'Domain name availability checker.'
   spec.test_files = ['test/docheck_test.rb', 'test/helper.rb'] 
-  spec.version = '1.0.2'
+  spec.version = '1.1.0'
 end

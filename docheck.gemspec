@@ -1,6 +1,7 @@
 Gem::Specification.new do |spec|
   spec.authors = 'Kunto Aji Kristianto'
   spec.add_dependency('whois', '~> 1.3.8')
+  spec.add_development_dependency('shoulda')
   spec.description = <<-EOF
     Domain name availability checker.
   EOF

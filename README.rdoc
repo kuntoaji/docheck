@@ -16,7 +16,7 @@
 == Usage
 From the command line:
 
-  docheck google
+  docheck -n google
 
 From the Ruby file or IRB.
 

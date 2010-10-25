@@ -13,23 +13,20 @@ module Docheck
 
     # DNS name of the generic top-level domain
     # http://en.wikipedia.org/wiki/List_of_Internet_top-level_domains
-    TLD = %w{aero asia biz cat com coop edu gov info
-    int jobs mil mobi museum name net org pro tel travel}
+    TLD = %w[aero asia biz cat com coop edu gov info
+    int jobs mil mobi museum name net org pro tel travel]
 
-    # Public instance method to return available domains or
-    # registered domains
     attr_reader :available_domains, :registered_domains
 
     # base_name is sld (Second Level Domain) and
     # converted to lower case.
     def initialize(base_name)
-      @base_name = base_name.downcase
+      @base_name = base_name.to_s.downcase
       @available_domains = []
       @registered_domains = []
     end
 
-    # Print the result to STDOUT.
-    # Used by docheck executable.
+    # Print the fetch result.
     def print
       result = fetch
       
@@ -42,7 +39,7 @@ module Docheck
       result.last.map{|domain_name| puts "- #{domain_name}"}
     end
 
-    # Responsible to check domain's availability
+    # Check domain name availability
     # and return the result as array. 
     #
     # The first element of array will return all

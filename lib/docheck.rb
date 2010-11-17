@@ -4,11 +4,10 @@
 # Copyright:: Copyright (c) 2010 Kunto Aji Kristianto
 # License::   Distributes under MIT license
 
+require File.expand_path('../../version.rb', __FILE__)
 require 'whois'
 
 module Docheck
-  VERSION = '1.1.0'
-
   class Application
 
     # DNS name of the generic top-level domain

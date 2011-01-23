@@ -1,22 +1,32 @@
-Gem::Specification.new do |spec|
-  spec.authors = 'Kunto Aji Kristianto'
-  spec.add_dependency('whois', '~> 1.3.8')
-  spec.description = <<-EOF
-    Docheck is domain name availability checker.
+# -*- encoding: utf-8 -*-
+$:.push File.expand_path("../lib", __FILE__)
+require "docheck/version"
+
+Gem::Specification.new do |s|
+  s.name        = "docheck"
+  s.version     = Docheck::VERSION
+  s.platform    = Gem::Platform::RUBY
+  s.authors     = "Kunto Aji Kristianto"
+  s.email       = "kunto.aji.kr@gmail.com"
+  s.homepage    = "http://github.com/kuntoaji/docheck"
+  s.summary     = 'Domain name availability checker'
+  s.description = <<-EOF
+    Domain name availability checker.
   EOF
-  spec.email = 'kunto.aji.kr@gmail.com'
-  spec.executables << 'docheck'
-  spec.extra_rdoc_files = ['README.rdoc', 'LICENSE', 'VERSION']
-  spec.files = ['.gitignore', 'docheck.gemspec', 'LICENSE',
-    'README.rdoc', 'VERSION', 'bin/docheck', 'lib/docheck.rb',
-    'test/docheck_test.rb', 'test/helper.rb']
-  spec.has_rdoc = true
-  spec.homepage = 'http://github.com/kuntoaji/docheck'
-  spec.name = 'docheck'
-  spec.rdoc_options = ['--main', 'README.rdoc']
-  spec.required_ruby_version = '>= 1.8.7'
-  spec.requirements << 'ruby-whois, v1.3.8 or greater'
-  spec.summary = 'Domain name availability checker.'
-  spec.test_files = ['test/docheck_test.rb', 'test/helper.rb'] 
-  spec.version = '1.0.1'
+
+  s.rubyforge_project = "docheck"
+
+  s.files         = `git ls-files`.split("\n")
+  s.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")
+  s.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
+  s.require_paths = ["lib"]
+
+  s.has_rdoc = true
+  s.rdoc_options = ['--main', 'README.rdoc']
+  s.extra_rdoc_files = ['README.rdoc', 'LICENSE', 'VERSION']
+
+  s.required_ruby_version = '>= 1.8.7'
+  s.requirements << 'ruby-whois, v1.6.6 or greater'
+  s.add_dependency('whois', '~> 1.6.6')
+  s.add_development_dependency('shoulda')
 end

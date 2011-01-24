@@ -23,7 +23,7 @@ Gem::Specification.new do |s|
 
   s.has_rdoc = true
   s.rdoc_options = ['--main', 'README.rdoc']
-  s.extra_rdoc_files = ['README.rdoc', 'LICENSE', 'VERSION']
+  s.extra_rdoc_files = ['README.rdoc', 'LICENSE']
 
   s.required_ruby_version = '>= 1.8.7'
   s.requirements << 'ruby-whois, v1.6.6 or greater'

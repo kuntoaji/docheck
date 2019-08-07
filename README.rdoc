@@ -17,10 +17,19 @@ From the Ruby file or IRB.
 
   require 'docheck'
 
-  # Docheck only have two instance methods: print and fetch
-  Docheck::Application.new('github').print
-  # or
-  Docheck::Application.new('github').fetch
+  docheck = Docheck::Application.new('github')
+  
+  # returns two elements array. first array is available domains, last array is registered domains
+  docheck.fetch
+  
+  # returns all available domains
+  docheck.available_domains
+  
+  # returns all registered domains
+  docheck.registered_domains
+  
+  # print all available and registered domains
+  docheck.print
 
 == License
 Copyright (c) 2010 - 2019 Kunto Aji Kristianto, Docheck is released under the MIT license.

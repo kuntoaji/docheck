@@ -19,7 +19,7 @@ module Docheck
     # Print the fetch result.
     def print
       result = fetch
-      
+
       puts "\nDocheck Result\n"
       puts "--------------\n"
       puts "Available Domains:"
@@ -27,10 +27,12 @@ module Docheck
       puts "\n"
       puts "Registered Domains:"
       result.last.map{|domain_name| puts "- #{domain_name}"}
+
+      true
     end
 
     # Check domain name availability
-    # and return the result as array. 
+    # and return the result as array.
     #
     # The first element of array will return all
     # available domains as array.

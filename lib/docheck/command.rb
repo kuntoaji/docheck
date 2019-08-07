@@ -9,7 +9,7 @@ require 'optparse'
 
 begin
   OptionParser.new do |opts|
-    opts.banner = "Usage: docheck [basename]. Example: docheck google"
+    opts.banner = "Usage: docheck -n [basename]. Example: docheck -n google"
 
     opts.on("-v", "--version", "Show version") do
       puts "Docheck #{Docheck::VERSION}"

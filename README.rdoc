@@ -18,16 +18,16 @@ From the Ruby file or IRB.
   require 'docheck'
 
   docheck = Docheck::Application.new('github')
-  
+
   # returns two elements array. first array is available domains, last array is registered domains
   docheck.fetch
-  
+
   # returns all available domains
   docheck.available_domains
-  
+
   # returns all registered domains
   docheck.registered_domains
-  
+
   # print all available and registered domains
   docheck.print
 

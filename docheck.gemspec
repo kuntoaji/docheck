@@ -9,6 +9,7 @@ Gem::Specification.new do |s|
   s.authors     = "Kunto Aji Kristianto"
   s.email       = 'kuntoaji@kaklabs.com'
   s.homepage    = "http://github.com/kuntoaji/docheck"
+  s.license     = 'MIT'
   s.summary     = 'Domain name availability checker'
   s.description = <<-EOF
     Domain name availability checker.

@@ -4,33 +4,42 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project
 
-Docheck is a small Ruby gem and CLI that checks domain name availability. It takes a second-level name (for example `google`), appends each gTLD in `Docheck::Application::TLD`, and queries WHOIS for each one. The only runtime dependency is `whois` (pinned to `3.6.5`). The gemspec declares `required_ruby_version >= 1.9.2`.
+Docheck is a Ruby gem and CLI that checks domain name availability with RDAP. It takes a second-level name (for example `google`), appends each TLD in `Docheck::Checker::DEFAULT_TLDS`, and sends one HTTPS request per domain to the registry's RDAP server. It has no runtime dependencies. It requires Ruby >= 3.2 and is developed on Ruby 4.0.7 (`.ruby-version`).
+
+kak_api (`~/Workspace/kak_api`) uses this gem for `GET /tools/domain-availability`, which the Domain Availability Checker page in kaktools (`~/Workspace/kaktools`) calls. If you change the `Checker` or `Result` API, update that route and its spec.
 
 ## Commands
 
 ```sh
-bundle install                                    # install dependencies
-ruby -Itest test/docheck_test.rb                  # run all tests
-ruby -Itest test/docheck_test.rb -n "/version/"   # run tests whose name matches a pattern
-ruby bin/docheck -n <name>                        # run the CLI from source
-rake build                                        # build the gem into pkg/
-rake install                                      # build and install locally
-rake release                                      # tag, push, and publish to RubyGems
+bundle install
+bundle exec rake                                   # tests (ruby -w) and RuboCop
+bundle exec rake test                              # tests only
+bundle exec ruby -Itest test/checker_test.rb       # one test file
+bundle exec ruby -Itest test/checker_test.rb -n "/deadline/"   # tests matching a pattern
+bundle exec rubocop -a                             # autocorrect lint offenses
+bundle exec rake rdap:update                       # refresh data/rdap_dns.json from IANA
+ruby -Ilib exe/docheck -n <name>                   # run the CLI from source (live network)
+gem build docheck.gemspec
 ```
 
-- The Rakefile only loads `Bundler::GemHelper` tasks. It has no `test` task, so run tests with `ruby` directly.
-- There is no linter configuration.
-- Tests use `test/unit` with `shoulda` contexts (`context` / `should` blocks).
-- Tests make real WHOIS network calls (for the name `railsmine`). They are slow and fail without network access. Several tests also shell out to `ruby bin/docheck` and compare its stdout exactly.
+- Tests make no network calls. They inject `FakeHttp` (`test/test_helper.rb`) into `Checker`, or a fake `requester` lambda into `HttpClient`. Keep it that way.
+- CI (`.github/workflows/ci.yml`) runs `bundle exec rake` on Ruby 3.2, 3.3, 3.4, and 4.0. Do not use syntax newer than Ruby 3.2.
 
 ## Architecture
 
-- `bin/docheck` loads `lib/docheck/command.rb`.
-- `lib/docheck/command.rb` is the CLI. It runs `OptionParser` at load time (no wrapper class). It catches `InvalidOption` and `MissingArgument` and prints `Invalid option` / `Missing argument`. The tests assert these exact strings.
-- `lib/docheck.rb` is the library entry point. It requires `whois`, the version, and the application.
-- `lib/docheck/application.rb` holds all logic in `Docheck::Application`:
-  - `#fetch` loops over `TLD`, calls `Whois.whois`, and sorts each domain into `@available_domains` or `@registered_domains`. It returns `[available, registered]`. It retries failed lookups up to 4 times, then skips the TLD. The `attempts` counter resets only after a skip, so successful lookups do not reset it.
-  - `#print` calls `#fetch` and writes the result to stdout.
-  - `#fetch` appends to the instance arrays, so a second call on the same instance duplicates results.
-- `lib/docheck/version.rb` defines `Docheck::VERSION`. The gemspec reads it. Release commits bump it and use the version as the commit message (for example `v1.1.3`).
-- The gemspec builds its file lists from `git ls-files`. Commit new files before you run `rake build`, or the gem will not include them.
+- `Checker#check(name)` validates the name with `Name.normalize`, starts one thread per TLD, and joins them against one overall `deadline`. A thread still running at the deadline is killed, and its result is `:unknown`. The result is one `Result` per TLD, in TLD order.
+- `Result` is a `Data` with `domain` and `status`. The status is one of `:available` (404), `:registered` (200), `:unknown` (any other response, timeout, or network error), or `:unsupported` (the TLD has no RDAP server).
+- `Bootstrap` maps TLD to RDAP base URL from `data/rdap_dns.json`, a bundled snapshot of https://data.iana.org/rdap/dns.json. Loading it needs no network, which matters because kak_api freezes everything in production. It keeps only `https://` URLs.
+- `HttpClient` sends `HEAD`, not `GET`. Verisign (com, net, name) ends a `GET` 404 body by closing TLS without `close_notify`, and Ruby's OpenSSL 3 raises `SSLError` on that. It retries once on a timeout or 5xx, and follows at most one redirect, only to `https://`.
+- `Name::LABEL` allows only one LDH label. The name goes into the RDAP URL path, so this validation also blocks path injection. Do not loosen it without a replacement check.
+- `CLI#run` returns the exit status (0 for success, 64 for a usage error) and writes to injected `out`/`err` streams. `exe/docheck` only calls it.
+- `Application` is the 1.x API, kept as a wrapper over `Checker` for compatibility.
+- The gemspec lists files with `Dir` globs, so it includes `data/rdap_dns.json` and `CHANGELOG.md`. Add new top-level directories to that list.
+
+## Releases
+
+Bump `lib/docheck/version.rb`, run `rake rdap:update`, update `CHANGELOG.md`, and commit with the version as the message (for example `v2.0.0`). 2.0.0 is not yet published to RubyGems. Publish only when the user asks.
+
+## Git
+
+- Always commit directly to `master` in this repository. Do not create feature branches, even when global instructions say to branch first.

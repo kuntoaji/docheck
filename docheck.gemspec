@@ -1,29 +1,31 @@
-# -*- encoding: utf-8 -*-
-$:.push File.expand_path("../lib", __FILE__)
-require "docheck/version"
+# frozen_string_literal: true
+
+require_relative "lib/docheck/version"
 
 Gem::Specification.new do |s|
   s.name        = "docheck"
   s.version     = Docheck::VERSION
-  s.platform    = Gem::Platform::RUBY
-  s.authors     = "Kunto Aji Kristianto"
-  s.email       = 'kuntoaji@kaklabs.com'
-  s.homepage    = "http://github.com/kuntoaji/docheck"
-  s.license     = 'MIT'
-  s.summary     = 'Domain name availability checker'
-  s.description = <<-EOF
-    Domain name availability checker.
-  EOF
+  s.authors     = ["Kunto Aji Kristianto"]
+  s.email       = "kuntoaji@kaklabs.com"
+  s.homepage    = "https://github.com/kuntoaji/docheck"
+  s.license     = "MIT"
+  s.summary     = "Domain name availability checker"
+  s.description = "Checks whether a domain name is available or registered across generic TLDs, using RDAP."
 
-  s.files         = `git ls-files`.split("\n")
-  s.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")
-  s.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
+  s.required_ruby_version = ">= 3.2"
+
+  s.files = Dir["lib/**/*.rb", "exe/*", "data/*.json", "README.rdoc", "LICENSE", "CHANGELOG.md"]
+  s.bindir = "exe"
+  s.executables = ["docheck"]
   s.require_paths = ["lib"]
 
-  s.rdoc_options = ['--main', 'README.rdoc']
-  s.extra_rdoc_files = ['README.rdoc', 'LICENSE']
+  s.rdoc_options = ["--main", "README.rdoc"]
+  s.extra_rdoc_files = ["README.rdoc", "LICENSE"]
 
-  s.required_ruby_version = '>= 1.9.2'
-  s.add_dependency('whois', '3.6.5')
-  s.add_development_dependency('shoulda', '~> 3.6.0')
+  s.metadata = {
+    "source_code_uri" => "https://github.com/kuntoaji/docheck",
+    "changelog_uri" => "https://github.com/kuntoaji/docheck/blob/master/CHANGELOG.md",
+    "bug_tracker_uri" => "https://github.com/kuntoaji/docheck/issues",
+    "rubygems_mfa_required" => "true"
+  }
 end

@@ -1,8 +1,14 @@
 = Docheck
-Domain name availability checker. By default, It will return all available and registered domains.
+
+Domain name availability checker. Docheck checks a name against generic TLDs
+and reports which domains are available and which are registered.
+
+Docheck uses RDAP (RFC 9082/9083), the protocol that replaced WHOIS for gTLDs.
+It sends one HTTPS request per TLD to the registry's RDAP server, all in
+parallel. It has no runtime dependencies.
 
 == Requirements
-Ruby >= 1.9.2
+Ruby >= 3.2
 
 == Installation
 
@@ -11,25 +17,42 @@ Ruby >= 1.9.2
 == Usage
 From the command line:
 
-  docheck -n google
+  $ docheck -n google
 
-From the Ruby file or IRB.
+The command exits with status 0 on success and 64 on a usage error or an
+invalid name.
 
-  require 'docheck'
+From Ruby:
 
-  docheck = Docheck::Application.new('github')
+  require "docheck"
 
-  # returns two elements array. first array is available domains, last array is registered domains
-  docheck.fetch
+  results = Docheck.check("github")
+  results.first          # => #<data Docheck::Result domain="github.com", status=:registered>
+  results.select(&:available?).map(&:domain)
 
-  # returns all available domains
-  docheck.available_domains
+  # Custom TLDs and deadline (seconds for the whole check)
+  checker = Docheck::Checker.new(tlds: %w[com net io], deadline: 5)
+  checker.check("github")
 
-  # returns all registered domains
-  docheck.registered_domains
+Each Docheck::Result has a +status+:
 
-  # print all available and registered domains
-  docheck.print
+* +:available+ - the registry has no record of the domain
+* +:registered+ - the registry has a record of the domain
+* +:unknown+ - the lookup failed (timeout, rate limit, or server error)
+* +:unsupported+ - the TLD has no RDAP server in the IANA bootstrap data
+
+Docheck::Checker#check raises Docheck::InvalidNameError when the name is not a
+single DNS label (1-63 letters, digits, or hyphens). Pass IDNs in punycode
+(+xn--...+).
+
+The 1.x API (Docheck::Application with +fetch+, +available_domains+,
++registered_domains+, and +print+) still works.
+
+== Development
+
+  $ bundle install
+  $ bundle exec rake                 # tests and RuboCop
+  $ bundle exec rake rdap:update     # refresh data/rdap_dns.json from IANA
 
 == License
-Copyright (c) 2010 - 2019 Kunto Aji Kristianto, Docheck is released under the MIT license.
+Copyright (c) 2010 - 2026 Kunto Aji Kristianto, Docheck is released under the MIT license.

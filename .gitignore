@@ -3,3 +3,7 @@
 *.swo
 *.gem
 .DS_Store
+
+/pkg/
+/.bundle/
+/coverage/
